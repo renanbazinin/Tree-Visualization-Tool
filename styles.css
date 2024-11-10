@@ -1,0 +1,80 @@
+/* Dark mode background and text colors */
+body {
+    background-color: #121212;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Instructions and Error Styling */
+h1, p {
+    color: #bbbbbb;
+}
+
+#error {
+    color: #ff6b6b;
+    margin: 10px;
+}
+
+/* Text Area and Button Styling */
+textarea {
+    background-color: #333333;
+    color: #ffffff;
+    border: 1px solid #555555;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+button {
+    background-color: #6200ea;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #3700b3;
+}
+
+/* Canvas Styling */
+#treeCanvas {
+    background-color: #222222;
+    border: 1px solid #333333;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+
+/* Tree Node Styling */
+.node {
+    fill: #3e7eff; /* Node fill color */
+    stroke: #ffffff; /* Node border color */
+    stroke-width: 2px;
+}
+
+.node text {
+    fill: #ffffff; /* Text color inside nodes */
+    font-size: 14px;
+}
+
+
+#input.valid {
+    outline: 2px solid green;
+}
+
+#input.partial {
+    outline: 2px solid orange;
+}
+
+#input.invalid {
+    outline: 2px solid red;
+}
+
+#error {
+    color: red;
+    margin: 10px;
+}

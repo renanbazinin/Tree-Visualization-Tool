@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tree Visualization Tool</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <link rel="stylesheet" href="styles.css">
+    <meta name="description" content="Visualize your tree with list or with nil-s (or both 😊) ">
+    <meta property="og:image" content="https://i.imgur.com/IZZbtEJ.png">
+    <link rel="icon" href="https://i.imgur.com/IZZbtEJ.png" type="image/x-icon">
+</head>
+<body>
+    <h1>Tree Visualization Tool</h1>
+    <p>Enter your tree notation below and click "Generate Tree" to visualize it.</p>
+    <textarea id="input" rows="5" cols="50" placeholder="Enter tree notation here..."></textarea><br>
+    <button id="generateButton">Generate Tree</button>
+    <div id="error" class="error"></div>
+    <canvas id="treeCanvas" width="800" height="600"></canvas>
+    <script src="script.js"></script>
+</body>
+</html>
