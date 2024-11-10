@@ -2,6 +2,11 @@
 
 This project is a JavaScript-based tree visualizer that parses text input in the form of list representations (e.g., `(nil nil)` or `((nil.nil) nil)`) and generates a visual representation of the tree structure on a canvas. The visualizer supports mixed and list modes and highlights input validity in real-time as you type.
 
+Use it now ! 
+🌐 [**Enter Site**](https://renanbazinin.github.io/Tree-Visualization-Tool/)  
+
+
+
 ## Features
 
 - Parses text input into a binary tree structure.
