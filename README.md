@@ -39,18 +39,3 @@ This project is a JavaScript-based tree visualizer that parses text input in the
 - Dot Mode: `((nil.nil).nil)`
 - Mixed Mode: `((nil.nil) nil)`
 
-## File Structure
-
-- `index.html`: HTML file containing the UI structure.
-- `styles.css`: Contains styles for dark mode and layout.
-- `script.js`: JavaScript file for handling input parsing, validation, and tree visualization.
-
-## Technologies Used
-
-- HTML5
-- CSS3
-- JavaScript (ES6)
-
-## License
-
-This project is licensed under the MIT License.
