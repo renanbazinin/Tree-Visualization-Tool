@@ -13,13 +13,11 @@ This project is a JavaScript-based tree visualizer that parses text input in the
 - Visualizes the tree structure with nodes and branches on a canvas.
 - Dark mode styling with cool visuals.
 
-## Demo
 
-[Demo URL](PLACEHOLDER_FOR_DEMO_URL)
 
 ## Screenshot
 
-![Tree Visualization Screenshot](PLACEHOLDER_FOR_SCREENSHOT_URL)
+![Tree Visualization Screenshot](https://i.imgur.com/bytXu7N.png)
 
 ## Installation
 
