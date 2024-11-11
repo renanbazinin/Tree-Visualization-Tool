@@ -5,15 +5,27 @@ document.getElementById('input').addEventListener('input', validateInput);
 document.getElementById('generateButton').addEventListener('click', function () {
     const input = document.getElementById('input').value;
     const errorDiv = document.getElementById('error');
+    const treeNotationDiv = document.getElementById('treeNotation');
+    const listNotationDiv = document.getElementById('listNotation');
     const canvas = document.getElementById('treeCanvas');
     const context = canvas.getContext('2d');
     context.clearRect(0, 0, canvas.width, canvas.height);
     errorDiv.textContent = '';
+    treeNotationDiv.textContent = '';
+    listNotationDiv.textContent = '';
 
     try {
         const tokens = tokenize(input);
         const tree = parseTokens(tokens);
         drawTree(tree, canvas);
+
+        // Generate output notations
+        const treeNotation = generateTreeNotation(tree);
+        const listNotation = generateListNotation(tree);
+
+        treeNotationDiv.textContent = treeNotation;
+        listNotationDiv.textContent = listNotation;
+
     } catch (e) {
         errorDiv.textContent = e.message;
     }
@@ -58,7 +70,7 @@ function isExpressionComplete(tokens) {
 
 // Tokenizer: Converts the input string into a list of tokens
 function tokenize(input) {
-    const regex = /\s*([()\.]|nil)\s*/g;
+    const regex = /\s*([()]|\.|[a-zA-Z_][a-zA-Z0-9_]*)\s*/g;
     const tokens = [];
     let match;
 
@@ -67,10 +79,10 @@ function tokenize(input) {
     }
 
     // Check for any invalid characters
-    const validChars = new Set(['(', ')', '.', 'n', 'i', 'l', ' ']);
-    for (let char of input.replace(/\s/g, '')) {
-        if (!validChars.has(char)) {
-            throw new Error(`Invalid character detected: '${char}'`);
+    const validTokenRegex = /^[a-zA-Z_][a-zA-Z0-9_]*$|^\(|^\)|^\.$/;
+    for (let token of tokens) {
+        if (!validTokenRegex.test(token)) {
+            throw new Error(`Invalid token detected: '${token}'`);
         }
     }
     return tokens;
@@ -87,10 +99,9 @@ function parseTokens(tokens) {
             throw new Error('Incomplete expression: expected more tokens.');
         }
 
-        if (tokens[index] === 'nil') {
-            index++;
-            return { value: 'nil', left: null, right: null };
-        } else if (tokens[index] === '(') {
+        const token = tokens[index];
+
+        if (token === '(') {
             index++; // Skip '('
             skipWhitespace();
 
@@ -101,6 +112,7 @@ function parseTokens(tokens) {
             if (tokens[index] === ')') {
                 // Empty list
                 index++;
+                // Return a node representing 'nil' for empty list
                 return { value: 'nil', left: null, right: null };
             }
 
@@ -111,6 +123,9 @@ function parseTokens(tokens) {
             }
             index++; // Skip ')'
             return expr;
+        } else if (token === 'nil' || isIdentifier(token)) {
+            index++;
+            return { value: token, left: null, right: null };
         } else {
             throw new Error(`Unexpected token: '${tokens[index]}' at position ${index}`);
         }
@@ -137,7 +152,7 @@ function parseTokens(tokens) {
 
             let secondExpr = parseExpression();
             skipWhitespace();
-            return { value: 'node', left: firstExpr, right: secondExpr };
+            return { value: '.', left: firstExpr, right: secondExpr };
         } else {
             // List notation or mixed notation
             let elements = [firstExpr];
@@ -148,12 +163,12 @@ function parseTokens(tokens) {
                 elements.push(expr);
             }
 
-            // Convert the list of elements into nested pairs ending with nil
-            let node = { value: 'nil', left: null, right: null }; // Start with nil as the end of the list
+            // Convert the list of elements into nested pairs ending with 'nil' node
+            let node = { value: 'nil', left: null, right: null }; // Start with 'nil' node as the end of the list
 
             for (let i = elements.length - 1; i >= 0; i--) {
                 node = {
-                    value: 'node',
+                    value: '.',
                     left: elements[i],
                     right: node
                 };
@@ -169,12 +184,53 @@ function parseTokens(tokens) {
         }
     }
 
+    function isIdentifier(token) {
+        return /^[a-zA-Z_][a-zA-Z0-9_]*$/.test(token);
+    }
+
     const result = parseExpression();
     skipWhitespace();
     if (index < tokens.length) {
         throw new Error("Unexpected tokens after parsing completed");
     }
     return result;
+}
+
+// Function to generate tree notation (dot notation)
+function generateTreeNotation(node) {
+    if (node === null) {
+        return 'nil';
+    } else if (node.left === null && node.right === null) {
+        return node.value;
+    } else {
+        return `(${generateTreeNotation(node.left)} . ${generateTreeNotation(node.right)})`;
+    }
+}
+
+// Function to generate list notation
+function generateListNotation(node) {
+    function isList(node) {
+        return node === null || (node.value === '.' && (node.right === null || isList(node.right)));
+    }
+
+    if (node === null) {
+        return 'nil';
+    } else if (node.left === null && node.right === null) {
+        return node.value;
+    } else if (isList(node)) {
+        let elements = [];
+        while (node.value === '.') {
+            elements.push(generateListNotation(node.left));
+            node = node.right;
+        }
+        if (node.value !== 'nil') {
+            // Improper list
+            return `(${elements.join(' ')} . ${generateListNotation(node)})`;
+        }
+        return `(${elements.join(' ')})`;
+    } else {
+        return `(${generateListNotation(node.left)} . ${generateListNotation(node.right)})`;
+    }
 }
 
 // Drawing function: Visualizes the tree on the canvas
@@ -258,8 +314,10 @@ function drawTree(root, canvas) {
 
         // Draw label
         context.fillStyle = 'black';
-        if (node.value === 'nil') {
-            context.fillText('nil', x, y);
+        if (node.value !== '.') {
+            context.fillText(node.value, x, y);
+        } else {
+            context.fillText('.', x, y);
         }
     }
 

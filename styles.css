@@ -78,3 +78,10 @@ button:hover {
     color: red;
     margin: 10px;
 }
+
+#outputs {
+    margin-top: 20px;
+    text-align: left;
+    display: inline-block;
+    text-align: left;
+}
